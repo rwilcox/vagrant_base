@@ -18,4 +18,10 @@ Steps to fire up a new VM
   2. Edit port forwarding, shared folders
   3. vagrant up
 
+What To Do with A New VM
+==========================================================
+
+  1. Write down port numbers on host machine that map
+  2. Tell user to change password
+  3. All project work should happen in /projects (TODO: symlink ~/projects to this?)
 
