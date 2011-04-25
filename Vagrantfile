@@ -41,7 +41,7 @@ Vagrant::Config.run do |config|
   # #               Managed by Puppet.\n"
   # # }
   #
-  config.vm.provision :puppet
+  config.vm.provision :puppet, :module_path => "/home/vagrant/puppet_modules"
 
   # config.vm.provision :puppet do |puppet|
   #   puppet.manifests_path = "manifests"
