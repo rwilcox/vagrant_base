@@ -21,5 +21,6 @@ class pythonextras {
 }
 
 include lucid32
-include python
+include python 
+# python support provided by https://github.com/garthrk/python-module-for-puppet
 include pythonextras
