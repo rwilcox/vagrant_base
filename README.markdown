@@ -6,10 +6,19 @@ Provides a template Vagrant project that will boot up a good working Vagrant box
 Convention over configuration
 =========================================================
 
-This Vagrant file and setup assumes a number of things
+This Vagrant file and setup assumes a number of things:
+
   1. You want a 64bit VM
   2. You want to use Puppet
 
+What this base box pulls in
+==========================================================
+
+  1. Git
+  2. Mercurial
+  3. GNU Screen
+
+(and more to come)
 
 Steps to fire up a new VM
 ===========================================================
