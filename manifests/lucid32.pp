@@ -1,3 +1,13 @@
+stage { "first": before => Stage[main] }
+stage { "last": require => Stage[main] }
+
+class predeps {
+
+  package { "python-dev":
+    ensure => present,
+  }
+}
+
 class lucid32 {
   package { "screen":
     ensure => present,
@@ -6,11 +16,6 @@ class lucid32 {
   package { "git-core":
     ensure => present,
   }
-
-  package { "python-dev":
-    ensure => present,
-  }
-
 }
 
 class pythonextras {
@@ -18,9 +23,19 @@ class pythonextras {
      name => "mercurial"
   }
 
+  pymod {"pip":
+    name => "pip"
+  }
 }
 
-include lucid32
-include python 
+class {
+  "predeps": stage => first;
+  "lucid32": stage => main;
+  "python": stage => main;
+  "pythonextras": stage => main;
+}
+#include lucid32
+#include python 
 # python support provided by https://github.com/garthrk/python-module-for-puppet
-include pythonextras
+# used to let us talk to easy_install and install Python modules
+#include pythonextras
