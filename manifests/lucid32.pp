@@ -6,6 +6,12 @@ class predeps {
   package { "python-dev":
     ensure => present,
   }
+
+  exec {"apt-get update":
+    command => "/usr/bin/apt-get update",
+    user => "root",
+    logoutput => on_failure,
+  }
 }
 
 class lucid32 {
@@ -16,6 +22,7 @@ class lucid32 {
   package { "git-core":
     ensure => present,
   }
+
 }
 
 class pythonextras {
@@ -26,6 +33,10 @@ class pythonextras {
   pymod {"pip":
     name => "pip"
   }
+
+  pymod {"virtualenv":
+    name => "virtualenv"
+  }
 }
 
 class {
@@ -33,6 +44,7 @@ class {
   "lucid32": stage => main;
   "python": stage => main;
   "pythonextras": stage => main;
+  "mysql": stage => main;
 }
 #include lucid32
 #include python 
