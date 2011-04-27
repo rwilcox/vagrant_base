@@ -18,8 +18,9 @@ What this base box pulls in
   2. Mercurial
   3. GNU Screen
   4. MySQL
+  5. SQLite
+  6. Python modules: pip, virtualenv
 
-(and more to come)
 
 Puppet Modules Required
 ===========================================================
@@ -43,4 +44,5 @@ What To Do with A New VM
   2. Tell user to change password
   3. All project work should happen in /projects (TODO: symlink ~/projects to this?)
   4. Change your mysql root password
+  5. Install rvm
 

@@ -23,6 +23,31 @@ class lucid32 {
     ensure => present,
   }
 
+  package { "sqlite3":
+    ensure => present,
+  }
+
+  package { "libsqlite3-dev":
+    ensure => present,
+  }
+
+  package { "curl":
+    ensure => present,
+  }
+
+  # TODO: maybe get this set up? Now we do have a manual
+  # step of getting this up, but in addition to doing the
+  # command you also have to add it to your profile file
+  # (which might be Bash, but maybe not. I like zsh, for
+  # example. WD-rpw 04-29-2011
+  #exec { "rvm installer":
+  #  cwd => "/home/vagrant/",
+  #  creates => "/home/vagrant/.rvm",
+  #  require => [ Package["git-core"], Package['curl'] ],
+  #  command => "/bin/bash < <(/usr/bin/curl -s https://rvm.beginrescueend.com/install/rvm)",
+  #  user => "vagrant"
+
+  # } 
 }
 
 class pythonextras {
