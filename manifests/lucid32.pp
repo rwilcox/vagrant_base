@@ -51,6 +51,10 @@ class lucid32 {
     ensure => present,
   }
 
+  package {"libxslt-dev":
+    ensure => present,
+  }
+
   # TODO: maybe get this set up? Now we do have a manual
   # step of getting this up, but in addition to doing the
   # command you also have to add it to your profile file
