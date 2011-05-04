@@ -12,6 +12,10 @@ class predeps {
     user => "root",
     logoutput => on_failure,
   }
+
+  package{"libaio-dev":
+    ensure => present,
+  }
 }
 
 class lucid32 {
@@ -40,6 +44,10 @@ class lucid32 {
   }
 
   package {"libreadline5-dev":
+    ensure => present,
+  }
+
+  package {"libxml2-dev":
     ensure => present,
   }
 
@@ -77,7 +85,7 @@ class {
   "lucid32": stage => main;
   "python": stage => main;
   "pythonextras": stage => main;
-  "mysql": stage => main;
+  #"mysql": stage => main;
 }
 #include lucid32
 #include python 
