@@ -37,6 +37,12 @@ Steps to fire up a new VM
   2. Edit port forwarding, shared folders
   3. vagrant up
 
+To use this box as a basebox for other VMs
+=========================================================
+
+  1. vagrant package
+  2. vagrant box add NAME package.box
+
 What To Do with A New VM
 ==========================================================
 
