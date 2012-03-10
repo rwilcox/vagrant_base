@@ -1,8 +1,20 @@
+include mini_postgres
+include rvm
+
+# http://groups.google.com/group/puppet-users/browse_thread/thread/c60e8ae314ae687b
+Exec {
+    path => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
+}
+
+stage { "pre-rvm": before => Stage[rvm-install] }
 stage { "first": before => Stage[main] }
 stage { "last": require => Stage[main] }
 
 class predeps {
-
+  /* these items will get installed before Puppet installs RVM.
+     So we can safely do things like make sure the latest packages
+     Are avail, and remove any user based RVMs we might have on the base box
+  */
   package { "python-dev":
     ensure => present,
   }
@@ -13,33 +25,46 @@ class predeps {
     logoutput => on_failure,
   }
 
-  package{"libaio-dev":
+
+  group { "puppet":
     ensure => present,
   }
+
+  file {"vagrant_rvmrc":
+    path => "/home/vagrant/.rvmrc",
+    ensure => absent,
+    before => Exec["vagrant_rvm"],
+  }
+
+  exec {"vagrant_rvm":
+     /* use rm -rf here, even though it is considered dirty - File resource
+        would check to see if included files are needed by later Puppet stages,
+        which (given number of files in .rvm) will take forever.
+
+       -f gives us the nice side effect of NOT returning an error code
+       if the directory has already been deleted (by previous Puppet runs!)
+     */
+     command => "rm -rf /home/vagrant/.rvm",
+     user => root,
+     logoutput => on_failure
+  }
+  /* I believe you could also do:
+        before => Exec["Stage[rvm-install]/Exec[system-rvm"] to specify an inter-class dependancy
+        However, using run stages to make sure the entire system is sane before even starting
+        to do work seems the preferable option. WD-rpw 03-10-2012
+  */
+
 }
 
 class lucid32 {
+  package{"libaio-dev":
+    ensure => present,
+    /* before => Package[""]  */
+   /* this package was in the predeps stage, but not sure why...
+      maybe I needed it to be installed for something else? */
+  }
+
   package { "screen":
-    ensure => present,
-  }
-
-  package { "git-core":
-    ensure => present,
-  }
-
-  package { "sqlite3":
-    ensure => present,
-  }
-
-  package { "libsqlite3-dev":
-    ensure => present,
-  }
-
-  package { "curl":
-    ensure => present,
-  }
-
-  package {"libssl-dev":
     ensure => present,
   }
 
@@ -47,27 +72,61 @@ class lucid32 {
     ensure => present,
   }
 
-  package {"libxml2-dev":
-    ensure => present,
-  }
-
+/*
   package {"libxslt-dev":
     ensure => present,
   }
+*/
 
-  # TODO: maybe get this set up? Now we do have a manual
-  # step of getting this up, but in addition to doing the
-  # command you also have to add it to your profile file
-  # (which might be Bash, but maybe not. I like zsh, for
-  # example. WD-rpw 04-29-2011
-  #exec { "rvm installer":
-  #  cwd => "/home/vagrant/",
-  #  creates => "/home/vagrant/.rvm",
-  #  require => [ Package["git-core"], Package['curl'] ],
-  #  command => "/bin/bash < <(/usr/bin/curl -s https://rvm.beginrescueend.com/install/rvm)",
-  #  user => "vagrant"
+  /* rvm puppet installs many packages we once put here to build Ruby & friends
+    WD-rpw 03-09-2012 */
 
-  # } 
+  postgresql::user {"vagrant":
+    ensure => present,
+    superuser => true,
+  }
+  /* we can use rake db:setup to create our database.
+    Also, thanks to the magic of Puppet dependancies, this changes the encoding
+    of the Posgres cluster (is ASCII in Ubuntu Lucid, should be UTF-8).
+   */
+}
+
+class project_custom {
+
+/* CHANGE ME:
+  1. ADD PACKAGES SPECIFIC TO YOUR NEEDS
+  2. change PROJECT_NAME rvm_gemset settings to proper gemset to create */
+*/
+
+
+  file { '/etc/motd':
+    content => "*** Welcome to the PROJECT_NAME box ***\n"
+  }
+
+  rvm::system_user { vagrant: ;}
+  rvm_system_ruby {
+    'ruby-1.9.2-p290':
+      ensure => 'present',
+      default_use => false;
+    'ruby-1.8.7-p357':
+      ensure => 'present',
+      default_use => false;
+  }
+
+  rvm_gemset {
+  "ruby-1.9.2-p290@PROJECT_NAME":
+    ensure => present,
+    require => Rvm_system_ruby['ruby-1.9.2-p290'];
+  }
+
+  rvm_gem {
+    'bundler':
+      name => "bundler",
+      ruby_version => 'ruby-1.9.2-p290',
+      ensure => latest,
+      require => Rvm_gemset['ruby-1.9.2-p290@PROJECT_NAME'];
+  }
+
 }
 
 class pythonextras {
@@ -85,14 +144,15 @@ class pythonextras {
 }
 
 class {
-  "predeps": stage => first;
+  "predeps": stage => pre-rvm;
   "lucid32": stage => main;
   "python": stage => main;
   "pythonextras": stage => main;
-  #"mysql": stage => main;
+  "project_custom": stage => last;
 }
+
 #include lucid32
-#include python 
+#include python
 # python support provided by https://github.com/garthrk/python-module-for-puppet
 # used to let us talk to easy_install and install Python modules
 #include pythonextras
