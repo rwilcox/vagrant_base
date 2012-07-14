@@ -26,7 +26,7 @@ What this base box pulls in
 Puppet Modules Required
 ===========================================================
 
-  1. [Python Puppet Module](https://github.com/garthrk/python-module-for-puppet)
+  1. [Python Puppet Module](https://github.com/garthk/python-module-for-puppet)
   2. [Mini-Postgres Puppet Module](https://github.com/rwilcox/puppet_mini_postgres)
   3. [Puppet Module for RVM](https://github.com/blt04/puppet-rvm)
 
