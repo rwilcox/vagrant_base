@@ -19,18 +19,19 @@ What this base box pulls in
   3. GNU Screen
   4. Postgresql
   5. SQLite
-  6. Python modules: pip, virtualenv
   7. RVM
 
 
 Puppet Modules Required
 ===========================================================
 
-  1. [Python Puppet Module](https://github.com/garthrk/python-module-for-puppet)
+run `make modules_folder` to download them, but here's a list anyway
+
+  1. [NodeJS Puppet Module](https://github.com/puppetlabs/puppetlabs-nodejs)
+  2. [Puppet standard library](https://github.com/puppetlabs/puppetlabs-stdlib)
+  3. [Puppet APT library](https://github.com/puppetlabs/puppetlabs-apt)
   2. [Mini-Postgres Puppet Module](https://github.com/rwilcox/puppet_mini_postgres)
   3. [Puppet Module for RVM](https://github.com/blt04/puppet-rvm)
-
-The Vagrant file assumes your Puppet modules live in /home/vagrant/puppet_modules. You might need to fix this path on your system (I'm doing this on Linux, not OS X)
 
 Steps to fire up a new VM
 ===========================================================
@@ -38,6 +39,7 @@ Steps to fire up a new VM
   1. Clone appropriate Git Vagrant repo
   2. Edit port forwarding, shared folders
   3. Open manifests/lucid32.pp, search for CHANGE ME. Change specified items
+  4. `make modules_folder`
   4. vagrant up
 
 To use this box as a basebox for other VMs
