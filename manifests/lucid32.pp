@@ -1,6 +1,10 @@
 include mini_postgres
 include rvm
 
+include nodejs
+# NodeJS support provided by https://github.com/puppetlabs/puppetlabs-nodejs
+# it also brings in the puppet standard library and APT puppet support
+
 # http://groups.google.com/group/puppet-users/browse_thread/thread/c60e8ae314ae687b
 Exec {
     path => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
@@ -16,6 +20,10 @@ class predeps {
      Are avail, and remove any user based RVMs we might have on the base box
   */
   package { "python-dev":
+    ensure => present,
+  }
+
+  package {"libevent-dev":
     ensure => present,
   }
 
@@ -57,6 +65,12 @@ class predeps {
 }
 
 class lucid32 {
+  apt::source {"debian_backports":
+    location          => "http://us.archive.ubuntu.com/ubuntu/",
+    release           => "lucid-backports",
+    repos             => "main restricted universe multiverse",
+  }
+
   package{"libaio-dev":
     ensure => present,
     /* before => Package[""]  */
@@ -72,23 +86,29 @@ class lucid32 {
     ensure => present,
   }
 
-/*
-  package {"libxslt-dev":
-    ensure => present,
+  # unison is picky about client/server versions, FORCE this version because it's what I can get. WD-rpw 07-26-2012
+  apt::force {"unison":
+    release => "lucid-backports",
+    version => "2.32.52",
+    #ensure => present,
+    require => Apt::Source["debian_backports"]
   }
-*/
-
-  /* rvm puppet installs many packages we once put here to build Ruby & friends
-    WD-rpw 03-09-2012 */
 
   postgresql::user {"vagrant":
     ensure => present,
     superuser => true,
   }
-  /* we can use rake db:setup to create our database.
-    Also, thanks to the magic of Puppet dependancies, this changes the encoding
-    of the Posgres cluster (is ASCII in Ubuntu Lucid, should be UTF-8).
-   */
+
+  package {"coffee-script":
+    ensure => present,
+    provider => 'npm',
+  }
+
+  package {"less":
+    ensure => present,
+    provider => 'npm',
+  }
+
 }
 
 class project_custom {
@@ -129,30 +149,12 @@ class project_custom {
 
 }
 
-class pythonextras {
-  pymod {"mercurial":
-     name => "mercurial"
-  }
-
-  pymod {"pip":
-    name => "pip"
-  }
-
-  pymod {"virtualenv":
-    name => "virtualenv"
-  }
-}
 
 class {
   "predeps": stage => pre-rvm;
   "lucid32": stage => main;
   "python": stage => main;
-  "pythonextras": stage => main;
   "project_custom": stage => last;
 }
 
 #include lucid32
-#include python
-# python support provided by https://github.com/garthrk/python-module-for-puppet
-# used to let us talk to easy_install and install Python modules
-#include pythonextras
