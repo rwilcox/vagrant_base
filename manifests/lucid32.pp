@@ -118,6 +118,11 @@ class project_custom {
   2. change PROJECT_NAME rvm_gemset settings to proper gemset to create */
 */
 
+  user { "vagrant":
+    ensure => present,
+    shell  => "/bin/zsh",
+    require => Package["zsh"]  /* I like zsh, thank you very much */
+  }
 
   file { '/etc/motd':
     content => "*** Welcome to the PROJECT_NAME box ***\n"
@@ -145,6 +150,10 @@ class project_custom {
       ruby_version => 'ruby-1.9.2-p290',
       ensure => latest,
       require => Rvm_gemset['ruby-1.9.2-p290@PROJECT_NAME'];
+  }
+
+  package {"zsh":
+    ensure => present,
   }
 
 }
