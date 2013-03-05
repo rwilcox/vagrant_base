@@ -156,6 +156,11 @@ class project_custom {
     ensure => present,
   }
 
+  file {"/etc/zsh/zprofile":
+    content => "source /etc/profile.d/rvm.sh",  /*make SURE we source the rvm file - might not happen in zsh init */
+    require => Rvm_system_ruby["ruby-1.9.2"]
+ }
+
 }
 
 
