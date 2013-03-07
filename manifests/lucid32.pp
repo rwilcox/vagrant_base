@@ -129,12 +129,31 @@ class project_custom {
   }
 
   rvm::system_user { vagrant: ;}
+
+/*
+	NOTE: the ruby configurations below pull in openssl as the openssl on the OS
+	may be too old to support Rubygems 2.0 + HTTPS properly.
+
+	And by "not support Rubygems 2.0 + HTTPS properly" I mean:
+
+	> Bundler::Fetcher::CertificateFailureError: Could not verify the SSL certificate for https://rubygems.org/
+	or
+	> Could not verify the SSL certificate for https://rubygems.org/.
+
+*/
   rvm_system_ruby {
     'ruby-1.9.2-p290':
       ensure => 'present',
-      default_use => false;
+      default_use => false,
+      install_opts => "--with-openssl-dir=$rvm_path/usr",
+      require => "ruby-1.8.7-p357";
+  }
+
+  rvm_system_ruby {
     'ruby-1.8.7-p357':
       ensure => 'present',
+      pkg => "openssl", /* THIS LINE requires the puppet-rvm from the makefile OR <https://github.com/blt04/puppet-rvm/pull/68> to be merged into puppet-rvm master */
+      install_opts => "--with-openssl-dir=$rvm_path/usr",
       default_use => false;
   }
 
