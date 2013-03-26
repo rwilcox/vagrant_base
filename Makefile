@@ -17,4 +17,5 @@ modules_folder:
 	if test -d modules/rvm; then cd ./modules/rvm && git pull origin rvm_puppet_works_without_installing_rvm; else cd ./modules && git clone git://github.com/rwilcox/puppet-rvm.git rvm && cd rvm && git checkout -t origin/rvm_puppet_works_without_installing_rvm; fi
 
 code_folder:
+	mkdir -p code
 	if test ! -d code/YOUR_PROJECT; then cd ./code && git clone YOUR_PROJECT_URL; fi
