@@ -44,6 +44,26 @@ class predeps {
     before => Exec["vagrant_rvm"],
   }
 
+  /* New RVM build library requirements */
+  package {"libgdbm-dev":
+    ensure => present,
+  }
+
+
+  package {"libtool":
+    ensure => present,
+  }
+
+  package {"pkg-config":
+    ensure => present,
+  }
+
+  package {"libffi-dev":
+    ensure => present,
+  }
+
+  /* end new RVM build library requirements */
+
   exec {"vagrant_rvm":
      /* use rm -rf here, even though it is considered dirty - File resource
         would check to see if included files are needed by later Puppet stages,
