@@ -115,7 +115,7 @@ class project_custom {
 
 /* CHANGE ME:
   1. ADD PACKAGES SPECIFIC TO YOUR NEEDS
-  2. change PROJECT_NAME rvm_gemset settings to proper gemset to create */
+  2. change PROJECT_NAME rvm_gemset settings to proper gemset to create
 */
 
   user { "vagrant":
@@ -186,7 +186,6 @@ class project_custom {
 class {
   "predeps": stage => pre-rvm;
   "lucid32": stage => main;
-  "python": stage => main;
   "project_custom": stage => last;
 }
 
