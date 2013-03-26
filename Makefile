@@ -2,10 +2,10 @@
 update_code: modules_folder code_folder
 
 run: update_code
-        vagrant up
+	vagrant up
 
 reload: update_code
-        vagrant reload
+	vagrant reload
 
 modules_folder:
 	pwd
@@ -16,5 +16,5 @@ modules_folder:
 	if test -d modules/nodejs; then cd ./modules/nodejs && git pull origin master; else cd ./modules && git clone git://github.com/puppetlabs/puppetlabs-nodejs.git nodejs; fi
 	if test -d modules/rvm; then cd ./modules/rvm && git pull origin rvm_puppet_works_without_installing_rvm; else cd ./modules && git clone git://github.com/rwilcox/puppet-rvm.git rvm && cd rvm && git checkout -t origin/rvm_puppet_works_without_installing_rvm; fi
 
-code_folder:                                                                                                                                                if test ! -d code/sway-timeslips; then cd ./code && git clone https://github.com/greenriver/sway-timeslips.git; fi
-	#if test ! -d code/YOUR_PROJECT; then cd ./code && git clone YOUR_GIT_URL; fi
+code_folder:
+	if test ! -d code/YOUR_PROJECT; then cd ./code && git clone YOUR_PROJECT_URL; fi
