@@ -129,6 +129,11 @@ class lucid32 {
     provider => 'npm',
   }
 
+  package {"python-setuptools":
+  	ensure => present,
+  }
+
+
 }
 
 class project_custom {
