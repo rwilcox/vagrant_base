@@ -133,6 +133,9 @@ class lucid32 {
   	ensure => present,
   }
 
+  package {"vim":
+  	ensure => present,
+  }
 
 }
 
