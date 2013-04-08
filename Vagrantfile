@@ -26,9 +26,8 @@ Vagrant::Config.run do |config|
   # The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
-  config.vm.share_folder "project_data", "/projects", "/home/vagrant/shared/rpw_dev_base/code"
-  config.vm.share_folder "mysql_data", 	"/usr/local/mysql/data", "/home/vagrant/shared/rpw_dev_base/mysql"
-
+  config.vm.share_folder "project_data", "/projects", "code"
+  config.vm.share_folder "mysql_data", 	"/usr/local/mysql/data", "mysql"
   config.vm.forward_port(22, 2223)
   config.vm.forward_port(3000, 3031)
 
