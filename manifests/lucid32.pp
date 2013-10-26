@@ -1,13 +1,19 @@
 include mini_postgres
 include rvm
-
 include nodejs
-# NodeJS support provided by https://github.com/puppetlabs/puppetlabs-nodejs
-# it also brings in the puppet standard library and APT puppet support
+include 'apt'
 
 # http://groups.google.com/group/puppet-users/browse_thread/thread/c60e8ae314ae687b
 Exec {
     path => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
+}
+
+# Later versions of Ubuntu use a -y option when adding a PPA
+# however Lucid does not.
+# TODO: when upgrading past Lucid remove this declaration
+apt::ppa { 'ppa:chris-lea/node.js':
+  before => Anchor['nodejs::repo'],
+  options => ""
 }
 
 stage { "pre-rvm": before => Stage[rvm-install] }
@@ -107,12 +113,13 @@ class lucid32 {
   }
 
   # unison is picky about client/server versions, FORCE this version because it's what I can get. WD-rpw 07-26-2012
-  apt::force {"unison":
-    release => "lucid-backports",
-    version => "2.32.52",
-    #ensure => present,
-    require => Apt::Source["debian_backports"]
-  }
+  # TODO: pick the right Unison version, matching up Macports/10.9
+  # apt::force {"unison":
+  #  release => "lucid-backports",
+  #  version => "2.32.52",
+  #  #ensure => present,
+  #  require => Apt::Source["debian_backports"]
+  # }
 
   postgresql::user {"vagrant":
     ensure => present,
