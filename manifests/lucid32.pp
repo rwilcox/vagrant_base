@@ -172,11 +172,11 @@ class project_custom {
 
 */
   rvm_system_ruby {
-    'ruby-1.9.2-p290':
+    'ruby-1.9.3':
       ensure => 'present',
       default_use => false,
       install_opts => "--with-openssl-dir=$rvm_path/usr",
-      require => "ruby-1.8.7-p357";
+      require => Rvm_system_ruby["ruby-1.8.7-p357"];
   }
 
   rvm_system_ruby {
@@ -188,17 +188,17 @@ class project_custom {
   }
 
   rvm_gemset {
-  "ruby-1.9.2-p290@PROJECT_NAME":
+  "ruby-1.9.3@PROJECT_NAME":
     ensure => present,
-    require => Rvm_system_ruby['ruby-1.9.2-p290'];
+    require => Rvm_system_ruby['ruby-1.9.3'];
   }
 
   rvm_gem {
     'bundler':
       name => "bundler",
-      ruby_version => 'ruby-1.9.2-p290',
+      ruby_version => 'ruby-1.9.3',
       ensure => latest,
-      require => Rvm_gemset['ruby-1.9.2-p290@PROJECT_NAME'];
+      require => Rvm_gemset['ruby-1.9.3@PROJECT_NAME'];
   }
 
   package {"zsh":
@@ -207,7 +207,7 @@ class project_custom {
 
   file {"/etc/zsh/zprofile":
     content => "source /etc/profile.d/rvm.sh",  /*make SURE we source the rvm file - might not happen in zsh init */
-    require => Rvm_system_ruby["ruby-1.9.2"]
+    require => Rvm_system_ruby["ruby-1.9.3"]
  }
 
 }
