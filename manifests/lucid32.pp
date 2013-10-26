@@ -122,11 +122,13 @@ class lucid32 {
   package {"coffee-script":
     ensure => present,
     provider => 'npm',
+    require => Class["Nodejs"]
   }
 
   package {"less":
     ensure => present,
     provider => 'npm',
+    require => Class["Nodejs"]
   }
 
   package {"python-setuptools":
