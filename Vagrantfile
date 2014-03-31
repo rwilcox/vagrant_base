@@ -13,6 +13,8 @@ Vagrant::Config.run do |config|
     vm.cpu_count = 3        # yay multiple cores, and an 8 core host
   end
 
+  config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/rvm || puppet module install maestrodev/rvm"
+
   config.vm.provision :puppet,
   	:module_path => "modules",
   	:manifest_file => "lucid32.pp"

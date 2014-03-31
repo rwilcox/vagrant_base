@@ -44,17 +44,10 @@ class predeps {
     ensure => present,
   }
 
-  file {"vagrant_rvmrc":
-    path => "/home/vagrant/.rvmrc",
-    ensure => absent,
-    before => Exec["vagrant_rvm"],
-  }
-
   /* New RVM build library requirements */
   package {"libgdbm-dev":
     ensure => present,
   }
-
 
   package {"libtool":
     ensure => present,
@@ -69,25 +62,6 @@ class predeps {
   }
 
   /* end new RVM build library requirements */
-
-  exec {"vagrant_rvm":
-     /* use rm -rf here, even though it is considered dirty - File resource
-        would check to see if included files are needed by later Puppet stages,
-        which (given number of files in .rvm) will take forever.
-
-       -f gives us the nice side effect of NOT returning an error code
-       if the directory has already been deleted (by previous Puppet runs!)
-     */
-     command => "rm -rf /home/vagrant/.rvm",
-     user => root,
-     logoutput => on_failure
-  }
-  /* I believe you could also do:
-        before => Exec["Stage[rvm-install]/Exec[system-rvm"] to specify an inter-class dependancy
-        However, using run stages to make sure the entire system is sane before even starting
-        to do work seems the preferable option. WD-rpw 03-10-2012
-  */
-
 }
 
 class lucid32 {

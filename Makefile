@@ -14,7 +14,6 @@ modules_folder:
 	if test -d modules/apt; then cd ./modules/apt && git pull origin master; else cd ./modules && git clone git://github.com/puppetlabs/puppetlabs-apt.git apt; fi
 	if test -d modules/stdlib; then cd ./modules/stdlib && git pull origin master; else cd ./modules && git clone git://github.com/puppetlabs/puppetlabs-stdlib.git stdlib; fi
 	if test -d modules/nodejs; then cd ./modules/nodejs && git pull origin master; else cd ./modules && git clone git://github.com/puppetlabs/puppetlabs-nodejs.git nodejs; fi
-	if test -d modules/rvm; then cd ./modules/rvm && git pull origin rvm_puppet_works_without_installing_rvm; else cd ./modules && git clone git://github.com/rwilcox/puppet-rvm.git rvm && cd rvm && git checkout -t origin/rvm_puppet_works_without_installing_rvm; fi
 
 code_folder:
 	mkdir -p code
