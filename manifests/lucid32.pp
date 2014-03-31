@@ -1,4 +1,4 @@
-include mini_postgres
+#include mini_postgres
 include rvm
 include nodejs
 include 'apt'
@@ -27,6 +27,7 @@ class predeps {
   */
   package { "python-dev":
     ensure => present,
+    require => Exec["apt-get update"]
   }
 
   package {"libevent-dev":
@@ -65,11 +66,20 @@ class predeps {
 }
 
 class lucid32 {
-  apt::source {"debian_backports":
-    location          => "http://us.archive.ubuntu.com/ubuntu/",
-    release           => "lucid-backports",
-    repos             => "main restricted universe multiverse",
-  }
+#  apt::source {"debian_backports":
+#    location          => "http://us.archive.ubuntu.com/ubuntu/",
+#    release           => "lucid-backports",
+#    repos             => "main restricted universe multiverse",
+#  }
+
+# unison is picky about client/server versions, FORCE this version because it's what I can get. WD-rpw 07-26-2012
+#	TODO: pick the right Unison version, matching up Macports/10.9
+#	apt::force {"unison":
+#		release => "lucid-backports",
+#		version => "2.32.52",
+#		#ensure => present,
+#		require => Apt::Source["debian_backports"]
+#	}
 
   package{"libaio-dev":
     ensure => present,
@@ -82,23 +92,11 @@ class lucid32 {
     ensure => present,
   }
 
-  package {"libreadline5-dev":
-    ensure => present,
-  }
 
-  # unison is picky about client/server versions, FORCE this version because it's what I can get. WD-rpw 07-26-2012
-  # TODO: pick the right Unison version, matching up Macports/10.9
-  # apt::force {"unison":
-  #  release => "lucid-backports",
-  #  version => "2.32.52",
-  #  #ensure => present,
-  #  require => Apt::Source["debian_backports"]
-  # }
-
-  postgresql::user {"vagrant":
-    ensure => present,
-    superuser => true,
-  }
+#  postgresql::user {"vagrant":
+#    ensure => present,
+#    superuser => true,
+#  }
 
   package {"coffee-script":
     ensure => present,
@@ -156,17 +154,14 @@ class project_custom {
     'ruby-1.9.3':
       ensure => 'present',
       default_use => false,
-      install_opts => "--with-openssl-dir=$rvm_path/usr",
-      require => Rvm_system_ruby["ruby-1.8.7-p357"];
+#      require => Rvm_system_ruby["ruby-1.8.7-p357"];
   }
 
-  rvm_system_ruby {
-    'ruby-1.8.7-p357':
-      ensure => 'present',
-      pkg => "openssl", /* THIS LINE requires the puppet-rvm from the makefile OR <https://github.com/blt04/puppet-rvm/pull/68> to be merged into puppet-rvm master */
-      install_opts => "--with-openssl-dir=$rvm_path/usr",
-      default_use => false;
-  }
+#  rvm_system_ruby {
+#    'ruby-1.8.7-p357':
+#      ensure => 'present',
+#      default_use => false;
+#  }
 
   rvm_gemset {
   "ruby-1.9.3@PROJECT_NAME":
