@@ -8,12 +8,8 @@ Exec {
     path => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
 }
 
-# Later versions of Ubuntu use a -y option when adding a PPA
-# however Lucid does not.
-# TODO: when upgrading past Lucid remove this declaration
 apt::ppa { 'ppa:chris-lea/node.js':
   before => Anchor['nodejs::repo'],
-  options => ""
 }
 
 stage { "pre-rvm": before => Stage[rvm-install] }
