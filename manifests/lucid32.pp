@@ -12,70 +12,24 @@ apt::ppa { 'ppa:chris-lea/node.js':
   before => Anchor['nodejs::repo'],
 }
 
-stage { "pre-rvm": before => Stage[rvm-install] }
-stage { "first": before => Stage[main] }
-stage { "last": require => Stage[main] }
-
-class predeps {
-  /* these items will get installed before Puppet installs RVM.
-     So we can safely do things like make sure the latest packages
-     Are avail, and remove any user based RVMs we might have on the base box
-  */
-  package { "python-dev":
-    ensure => present,
-    require => Exec["apt-get update"]
-  }
-
-  package {"libevent-dev":
-    ensure => present,
-  }
-
   exec {"apt-get update":
     command => "/usr/bin/apt-get update",
     user => "root",
     logoutput => on_failure,
+     before => Package['python-software-properties']
   }
 
+stage { "first": before => Stage[main] }
+stage { "last": require => Stage[main] }
+
+
+
+
+class lucid32 {
 
   group { "puppet":
     ensure => present,
   }
-
-  /* New RVM build library requirements */
-  package {"libgdbm-dev":
-    ensure => present,
-  }
-
-  package {"libtool":
-    ensure => present,
-  }
-
-  package {"pkg-config":
-    ensure => present,
-  }
-
-  package {"libffi-dev":
-    ensure => present,
-  }
-
-  /* end new RVM build library requirements */
-}
-
-class lucid32 {
-#  apt::source {"debian_backports":
-#    location          => "http://us.archive.ubuntu.com/ubuntu/",
-#    release           => "lucid-backports",
-#    repos             => "main restricted universe multiverse",
-#  }
-
-# unison is picky about client/server versions, FORCE this version because it's what I can get. WD-rpw 07-26-2012
-#	TODO: pick the right Unison version, matching up Macports/10.9
-#	apt::force {"unison":
-#		release => "lucid-backports",
-#		version => "2.32.52",
-#		#ensure => present,
-#		require => Apt::Source["debian_backports"]
-#	}
 
   package{"libaio-dev":
     ensure => present,
@@ -130,63 +84,51 @@ class project_custom {
   }
 
   file { '/etc/motd':
-    content => "*** Welcome to the PROJECT_NAME box ***\n"
+    content => "*** Welcome to the ${project_name} box ***\n"
   }
 
   rvm::system_user { vagrant: ;}
 
-/*
-	NOTE: the ruby configurations below pull in openssl as the openssl on the OS
-	may be too old to support Rubygems 2.0 + HTTPS properly.
 
-	And by "not support Rubygems 2.0 + HTTPS properly" I mean:
-
-	> Bundler::Fetcher::CertificateFailureError: Could not verify the SSL certificate for https://rubygems.org/
-	or
-	> Could not verify the SSL certificate for https://rubygems.org/.
-
-*/
   rvm_system_ruby {
-    'ruby-1.9.3':
+    'ruby-2.0.0-p247':
       ensure => 'present',
       default_use => false,
-#      require => Rvm_system_ruby["ruby-1.8.7-p357"];
   }
 
-#  rvm_system_ruby {
-#    'ruby-1.8.7-p357':
-#      ensure => 'present',
-#      default_use => false;
-#  }
 
   rvm_gemset {
-  "ruby-1.9.3@PROJECT_NAME":
+  "ruby-2.0.0-p247@${rvm_name}":
     ensure => present,
-    require => Rvm_system_ruby['ruby-1.9.3'];
+    require => Rvm_system_ruby['ruby-2.0.0-p247'];
   }
 
   rvm_gem {
     'bundler':
       name => "bundler",
-      ruby_version => 'ruby-1.9.3',
+      ruby_version => 'ruby-2.0.0-p247',
       ensure => latest,
-      require => Rvm_gemset['ruby-1.9.3@PROJECT_NAME'];
+      require => Rvm_gemset["ruby-2.0.0-p247@${rvm_name}"];
   }
 
   package {"zsh":
     ensure => present,
   }
 
+  package {"sqlite":
+  	ensure => present,
+  }
+
   file {"/etc/zsh/zprofile":
     content => "source /etc/profile.d/rvm.sh",  /*make SURE we source the rvm file - might not happen in zsh init */
-    require => Rvm_system_ruby["ruby-1.9.3"]
+    require => Rvm_system_ruby["ruby-2.0.0-p247"]
  }
 
 }
 
 
 class {
-  "predeps": stage => pre-rvm;
+/*  "predeps": stage => pre-rvm; */
   "lucid32": stage => main;
   "project_custom": stage => last;
 }
