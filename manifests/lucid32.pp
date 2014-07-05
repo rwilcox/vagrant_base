@@ -60,22 +60,23 @@ class lucid32 {
     require => Class["Nodejs"]
   }
 
-  package {"python-setuptools":
-  	ensure => present,
-  }
-
   package {"vim":
   	ensure => present,
   }
 
+  package {["python-setuptools", "python-dev", "python-pip"]:
+  	ensure => present,
+  }
+
+  python::pip {"mercurial":
+  	ensure => present,
+  	require => Package['python-pip']
+  }
 }
 
 class project_custom {
 
-/* CHANGE ME:
-  1. ADD PACKAGES SPECIFIC TO YOUR NEEDS
-  2. change PROJECT_NAME rvm_gemset settings to proper gemset to create
-*/
+/* Include files, compilers etc that this project requires below */
 
   user { "vagrant":
     ensure => present,
