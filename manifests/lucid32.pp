@@ -23,7 +23,9 @@ stage { "first": before => Stage[main] }
 stage { "last": require => Stage[main] }
 
 
-
+class { 'redis':
+  version => "2.8.17",
+}
 
 class lucid32 {
 
@@ -71,6 +73,10 @@ class lucid32 {
   python::pip {"mercurial":
   	ensure => present,
   	require => Package['python-pip']
+  }
+
+  package{"git":
+    ensure => present
   }
 }
 

@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/apt || puppet module install puppetlabs-apt"
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/nodejs || puppet module install puppetlabs-nodejs"
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/python || puppet module install stankevich-python"
+  config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/redis || puppet module install thomasvandoren-redis"
 
   config.vm.provision :puppet do |puppet|
 
