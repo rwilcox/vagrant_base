@@ -2,10 +2,11 @@ Vagrant.configure("2") do |config|
   config.vm.box = "jnj_dev_cell/precise64"     # Ubuntu 12 with Puppet 3.6. Thanks Vagrant Cloud!
   #config.vm.box_url = "http://grahamc.com/vagrant/ubuntu-12.04-omnibus-chef.box"
 
-  #config.vm.customize do |vm|
-  #  vm.memory_size = 1024
-  #  vm.cpu_count = 2
-  #end
+  config.vm.provider "virtualbox" do |vm|
+    vm.memory = 1024
+    vm.cpus = 2
+  end
+
 
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/rvm || puppet module install maestrodev/rvm"
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/apt || puppet module install puppetlabs-apt"
