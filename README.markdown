@@ -22,10 +22,10 @@ What this base box pulls in
   7. RVM
 
 
-Puppet Modules Required
+Puppet Modules Pulled in by vagrant provision
 ===========================================================
 
-run `make modules_folder` to download them, but here's a list anyway
+Vagrant's provisioning tools pulls in various Puppet modules used by the manifest. Here's a list:
 
   1. [NodeJS Puppet Module](https://github.com/puppetlabs/puppetlabs-nodejs)
   2. [Puppet standard library](https://github.com/puppetlabs/puppetlabs-stdlib)
