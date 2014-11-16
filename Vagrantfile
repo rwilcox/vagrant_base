@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
     vm.cpus = 2
   end
 
+  config.vm.provision :shell, :path => "vagrant_tools/use_modern_ruby.sh"  # Above box is set with Ruby 1.8.7 WITH NO RUBYGEMS as default Ruby. Set to sane version.
 
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/rvm || puppet module install maestrodev/rvm"
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/apt || puppet module install puppetlabs-apt"
