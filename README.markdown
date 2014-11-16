@@ -63,5 +63,5 @@ TODOs
   - [ ] Use Puppetfile to manage dependancies, have VM shell provisioner fire off puppet-librarian to d/l them all?
   - [X] Move to Ubuntu 12 LTS, not Ubuntu 10 Lucid LTS
   - [ ] simple postgress doesn't work under Ubuntu 12. Fix or replace.
-  - [ ] Fix VagrantFile to use new v2 DSL
+  - [X] Fix VagrantFile to use new v2 DSL
 
