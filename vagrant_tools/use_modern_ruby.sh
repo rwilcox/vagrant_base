@@ -9,5 +9,7 @@
 if [ "$(ruby --version | grep 'ruby 1.8.7')" ]
 then
 	update-alternatives --set ruby /usr/bin/ruby1.9.1
-	gem install ruby-augeas
+	apt-get install libaugeas-ruby  --fix-missing --assume-yes
+	#apt-get install ruby1.9.1-dev  --fix-missing --assume-yes
+	#gem install ruby-augeas
 fi;
