@@ -1,7 +1,7 @@
-#include mini_postgres
-include rvm
+include mini_postgres
 include nodejs
 include 'apt'
+include rvm
 
 # http://groups.google.com/group/puppet-users/browse_thread/thread/c60e8ae314ae687b
 Exec {
