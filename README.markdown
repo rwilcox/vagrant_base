@@ -25,22 +25,28 @@ What this base box pulls in
 Puppet Modules Pulled in by vagrant provision
 ===========================================================
 
-Vagrant's provisioning tools pulls in various Puppet modules used by the manifest. Here's a list:
+Vagrant's provisioning tools pulls in *most* various Puppet modules used by the manifest. Here's a list:
 
   1. [NodeJS Puppet Module](https://github.com/puppetlabs/puppetlabs-nodejs)
   2. [Puppet standard library](https://github.com/puppetlabs/puppetlabs-stdlib)
   3. [Puppet APT library](https://github.com/puppetlabs/puppetlabs-apt)
-  2. [Mini-Postgres Puppet Module](https://github.com/rwilcox/puppet_mini_postgres)
-  3. [Puppet Module for RVM](https://github.com/blt04/puppet-rvm)
+  3. [Puppet Module for RVM](https://github.com/maestrodev/puppet-rvm)
+
+You'll need to run `make modules_folder` to download the rest (modules that aren't published to Puppet Forge or the published versions are out of date)
+
+  1. [Mini-Postgres Puppet Module](https://github.com/rwilcox/puppet_mini_postgres)
+  
+  
 
 Steps to fire up a new VM
 ===========================================================
 
-  1. Clone appropriate Git Vagrant repo
-  2. Edit port forwarding, shared folders
-  3. Open manifests/lucid32.pp, search for CHANGE ME. Change specified items
-  4. `make modules_folder`
-  4. vagrant up
+  1. Clone this repo
+  2. Edit port forwarding, shared folders in Vagrantfile
+  3. Change `puppet.facter` lines in Vagrantfile as appropriate
+  4. Edit `manifests/lucid32.pp` to include any project specific Puppet declarations you need
+  5. `make modules_folder`
+  6. vagrant up
 
 To use this box as a basebox for other VMs
 =========================================================
@@ -55,7 +61,6 @@ What To Do with A New VM
   2. Tell user to change password
   3. All project work should happen in /projects (TODO: symlink ~/projects to this?)
   4. Change your mysql root password
-  5. Install rvm
   
 TODOs
 =====================
