@@ -20,6 +20,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/redis || puppet module install thomasvandoren-redis"
 
   config.vm.provision :puppet do |puppet|
+    if ENV.key?('PUPPET_OPTS')  # See http://stackoverflow.com/a/27540417/224334
+      puppet.options = ENV['PUPPET_OPTS'].split(' ')
+    end
 
     puppet.module_path   = "modules"
     puppet.manifest_file = "lucid32.pp"
