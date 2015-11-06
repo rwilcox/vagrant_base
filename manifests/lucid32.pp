@@ -1,7 +1,13 @@
-include mini_postgres
+#include mini_postgres
 include nodejs
 include 'apt'
-include rvm
+
+class { "rubybuild":
+  ruby_version => "2.2.3",
+  ruby_install_dir => "/opt/rubies/"
+}
+
+
 
 # http://groups.google.com/group/puppet-users/browse_thread/thread/c60e8ae314ae687b
 Exec {
@@ -94,30 +100,6 @@ class project_custom {
     content => "*** Welcome to the ${project_name} box ***\n"
   }
 
-  rvm::system_user { vagrant: ;}
-
-
-  rvm_system_ruby {
-    'ruby-2.0.0-p247':
-      ensure => 'present',
-      default_use => false,
-  }
-
-
-  rvm_gemset {
-  "ruby-2.0.0-p247@${rvm_name}":
-    ensure => present,
-    require => Rvm_system_ruby['ruby-2.0.0-p247'];
-  }
-
-  rvm_gem {
-    'bundler':
-      name => "bundler",
-      ruby_version => 'ruby-2.0.0-p247',
-      ensure => latest,
-      require => Rvm_gemset["ruby-2.0.0-p247@${rvm_name}"];
-  }
-
   package {"zsh":
     ensure => present,
   }
@@ -127,9 +109,25 @@ class project_custom {
   }
 
   file {"/etc/zsh/zprofile":
-    content => "source /etc/profile.d/rvm.sh",  /*make SURE we source the rvm file - might not happen in zsh init */
-    require => Rvm_system_ruby["ruby-2.0.0-p247"]
+    content => "source /usr/local/share/chruby/chruby.sh; source /usr/local/share/chruby/auto.sh",  /*make SURE we source the chruby AND the auto file - might not happen in zsh init */
  }
+
+  /* TODO make me better */
+  exec { "install_chruby":
+    command => "/bin/bash -c 'cd /tmp && wget -O chruby-0.3.6.tar.gz https://github.com/postmodern/chruby/archive/v0.3.6.tar.gz && tar -xzvf chruby-0.3.6.tar.gz && cd chruby-0.3.6/ && make install'",
+    creates =>"/usr/local/share/chruby/chruby.sh",
+  }
+
+  file { "/etc/profile.d/chruby.sh":
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => 0755,
+    content => "source /usr/local/share/chruby/chruby.sh",
+    require => [
+          Exec["install_chruby"]
+    ]
+  }
 
 }
 

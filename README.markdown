@@ -19,7 +19,7 @@ What this base box pulls in
   3. GNU Screen
   4. Postgresql
   5. SQLite
-  7. RVM
+  7. [ruby-build](https://github.com/sstephenson/ruby-build) with [chruby](https://github.com/postmodern/chruby)
 
 
 Puppet Modules Pulled in by vagrant provision
@@ -31,6 +31,7 @@ Vagrant's provisioning tools pulls in *most* various Puppet modules used by the 
   2. [Puppet standard library](https://github.com/puppetlabs/puppetlabs-stdlib)
   3. [Puppet APT library](https://github.com/puppetlabs/puppetlabs-apt)
   3. [Puppet Module for RVM](https://github.com/maestrodev/puppet-rvm)
+  4. [Puppet module for RubyBuild](https://github.com/benben/puppet-rubybuild)
 
 You'll need to run `make modules_folder` to download the rest (modules that aren't published to Puppet Forge or the published versions are out of date)
 
