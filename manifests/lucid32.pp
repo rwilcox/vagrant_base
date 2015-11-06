@@ -80,10 +80,6 @@ class lucid32 {
   	ensure => present,
   	require => Package['python-pip']
   }
-
-  package{"git":
-    ensure => present
-  }
 }
 
 class project_custom {
