@@ -9,7 +9,8 @@ Convention over configuration
 This Vagrant file and setup assumes a number of things:
 
   1. You want a 64bit VM
-  2. You want to use Puppet
+  2. You want to use Puppet (4.3)
+  3. You want to keep all your Puppet stuff in one folder
 
 What this base box pulls in
 ==========================================================
