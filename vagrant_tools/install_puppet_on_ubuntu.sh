@@ -7,8 +7,10 @@ set -e
 # Load up the release information
 . /etc/lsb-release
 
-REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release-${DISTRIB_CODENAME}.deb"
+# pc1 = puppet 4.3.x
 
+REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release-pc1-${DISTRIB_CODENAME}.deb"
+echo $REPO_DEB_URL
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
 #--------------------------------------------------------------------
@@ -34,12 +36,12 @@ apt-get install -y wget >/dev/null
 echo "Configuring PuppetLabs repo..."
 repo_deb_path=$(mktemp)
 wget --output-document="${repo_deb_path}" "${REPO_DEB_URL}" 2>/dev/null
-dpkg -i "${repo_deb_path}" >/dev/null
+dpkg --force-confdef --force-confnew -i "${repo_deb_path}" >/dev/null
 apt-get update >/dev/null
 
 # Install Puppet
 echo "Installing Puppet..."
-DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install puppet >/dev/null
+DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install puppet-agent >/dev/null
 
 echo "Puppet installed!"
 
