@@ -10,7 +10,7 @@ reload: update_code
 modules_folder:
 	pwd
 	mkdir -p modules
-	if test -d modules/mini_postgres; then cd ./modules/mini_postgres && git pull origin master; else cd ./modules && git clone git://github.com/rwilcox/puppet_mini_postgres.git mini_postgres; fi
+	if test -d puppet/modules/mini_postgres; then cd ./puppet/modules/mini_postgres && git pull origin master; else cd ./puppet/modules && git clone git://github.com/rwilcox/puppet_mini_postgres.git mini_postgres; fi
 
 code_folder:
 	mkdir -p code

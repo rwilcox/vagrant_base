@@ -1,5 +1,5 @@
 #include mini_postgres
-include nodejs
+#include nodejs
 include 'apt'
 
 class { "rubybuild":
@@ -7,23 +7,22 @@ class { "rubybuild":
   ruby_install_dir => "/opt/rubies/"
 }
 
-
+class { 'nodejs':
+  repo_url_suffix => "node_0.12"
+}
 
 # http://groups.google.com/group/puppet-users/browse_thread/thread/c60e8ae314ae687b
 Exec {
     path => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
 }
 
-apt::ppa { 'ppa:chris-lea/node.js':
-  before => Anchor['nodejs::repo'],
-}
 
-  exec {"apt-get update":
-    command => "/usr/bin/apt-get update",
-    user => "root",
-    logoutput => on_failure,
-     before => Package['python-software-properties']
-  }
+#exec {"apt-get update":
+#  command => "/usr/bin/apt-get update",
+#  user => "root",
+#  logoutput => on_failure,
+#    before => Package['python-software-properties']
+#}
 
 stage { "first": before => Stage[main] }
 stage { "last": require => Stage[main] }
@@ -118,7 +117,7 @@ class project_custom {
     ensure  => present,
     owner   => root,
     group   => root,
-    mode    => 0755,
+    mode    => "0755",
     content => "source /usr/local/share/chruby/chruby.sh",
     require => [
           Exec["install_chruby"]
