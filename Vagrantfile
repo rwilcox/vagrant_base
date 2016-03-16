@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder "code", "/projects"   # EDIT/DUPLICATE THIS LINE for additional shared folders
 
-  config.vm.network :forwarded_port, guest: 22, host: 2223   # EDIT/DUPLIACTE THESE LINES FOR ADDITIONAL PORTS
+  config.vm.network :forwarded_port, guest: 22, host: 2223, auto_correct: true, id: "ssh" 
   config.vm.network :forwarded_port, guest: 3000, host: 3000
 
 end
