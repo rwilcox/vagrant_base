@@ -7,8 +7,8 @@ class { "rubybuild":
   ruby_install_dir => "/opt/rubies/"
 }
 
-class { 'nodejs':
-  repo_url_suffix => "node_0.12"
+class { '::nodejs':
+  version => 'v4.2.1'
 }
 
 # http://groups.google.com/group/puppet-users/browse_thread/thread/c60e8ae314ae687b
