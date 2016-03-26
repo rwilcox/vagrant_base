@@ -105,6 +105,7 @@ class project_custom {
 
   file {"/etc/zsh/zprofile":
     content => "source /usr/local/share/chruby/chruby.sh; source /usr/local/share/chruby/auto.sh",  /*make SURE we source the chruby AND the auto file - might not happen in zsh init */
+    require => Package["zsh"]
  }
 
   /* TODO make me better */
