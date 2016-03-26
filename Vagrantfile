@@ -1,5 +1,6 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "puppetlabs/ubuntu-12.04-64-puppet"   # Precise
+  #config.vm.box = "puppetlabs/ubuntu-12.04-64-puppet"   # Precise
+  config.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"    # Trusty
 
   config.vm.provider "virtualbox" do |vm|
     vm.memory = 1024
@@ -19,7 +20,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, :inline => "test -d #{module_path_on_guest}/ || mkdir #{puppet_environment_path_on_guest}"
 
   config.vm.provision :shell, :inline => "test -d #{module_path_on_guest}/apt || puppet module install puppetlabs-apt --environment=#{puppet_environment}"
-  config.vm.provision :shell, :inline => "test -d #{module_path_on_guest}/nodejs || puppet module install puppetlabs-nodejs --environment=#{puppet_environment}"
+  config.vm.provision :shell, :inline => "test -d #{module_path_on_guest}/nodejs || puppet module install willdurand/nodejs --version=1.9.3 --environment=#{puppet_environment}"
   config.vm.provision :shell, :inline => "test -d #{module_path_on_guest}/python || puppet module install stankevich-python --environment=#{puppet_environment}"
   config.vm.provision :shell, :inline => "test -d #{module_path_on_guest}/redis || puppet module install thomasvandoren-redis --environment=#{puppet_environment}"
   config.vm.provision :shell, :inline => "test -d #{module_path_on_guest}/rubybuild || puppet module install benben-rubybuild --environment=#{puppet_environment}"
